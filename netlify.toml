@@ -1,0 +1,9 @@
+[build]
+  publish = "."
+  functions = "netlify/functions"
+
+[[redirects]]
+  from = "/offer"
+  to = "/offer/"
+  status = 301
+  force = true
