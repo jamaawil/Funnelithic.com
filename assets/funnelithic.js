@@ -1,11 +1,11 @@
 
-/* exit-intent slide-in (desktop: cursor leaves top; mobile: decisive scroll back up) */
+/* delayed/exit-intent slide-in (desktop: cursor leaves top; mobile: decisive scroll back up) */
 (function(){
  var si=document.querySelector('.slidein'); if(!si) return;
  var dismissed=false; try{dismissed=localStorage.getItem('f_si')==='1'}catch(e){}
- var shown=false;
- function show(){ if(shown||dismissed) return; shown=true; si.classList.add('show'); }
- function dismiss(){ si.classList.remove('show'); try{localStorage.setItem('f_si','1')}catch(e){} }
+ var shown=false, timer=setTimeout(show,5000);
+ function show(){ if(shown||dismissed) return; shown=true; clearTimeout(timer); si.classList.add('show'); }
+ function dismiss(){ clearTimeout(timer); si.classList.remove('show'); try{localStorage.setItem('f_si','1')}catch(e){} }
  document.addEventListener('mouseout',function(e){ if(!e.relatedTarget && e.clientY<=2) show(); });
  var lastY=window.scrollY, armed=false;
  window.addEventListener('scroll',function(){ var y=window.scrollY; if(y>640)armed=true; if(armed&&y<lastY-42&&y<420)show(); lastY=y; },{passive:true});
