@@ -4,6 +4,12 @@
 
 [[redirects]]
   from = "/offer"
-  to = "/offer/"
-  status = 301
+  to = "/offer/index.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/offer/"
+  to = "/offer/index.html"
+  status = 200
   force = true

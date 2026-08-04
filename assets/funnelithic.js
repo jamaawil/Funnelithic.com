@@ -1,11 +1,17 @@
 
-/* exit-intent slide-in (desktop: cursor leaves top; mobile: decisive scroll back up) */
+/* timed/exit-intent slide-in with a seven-day dismissal */
 (function(){
  var si=document.querySelector('.slidein'); if(!si) return;
- var dismissed=false; try{dismissed=localStorage.getItem('f_si')==='1'}catch(e){}
+ var dismissalKey='f_si', dismissalTtl=7*24*60*60*1000, dismissed=false;
+ try{
+  var dismissedAt=parseInt(localStorage.getItem(dismissalKey)||'',10);
+  dismissed=Number.isFinite(dismissedAt)&&Date.now()-dismissedAt<dismissalTtl;
+  if(!dismissed)localStorage.removeItem(dismissalKey);
+ }catch(e){}
  var shown=false;
  function show(){ if(shown||dismissed) return; shown=true; si.classList.add('show'); }
- function dismiss(){ si.classList.remove('show'); try{localStorage.setItem('f_si','1')}catch(e){} }
+ function dismiss(){ si.classList.remove('show'); dismissed=true; try{localStorage.setItem(dismissalKey,String(Date.now()))}catch(e){} }
+ window.setTimeout(show,12000);
  document.addEventListener('mouseout',function(e){ if(!e.relatedTarget && e.clientY<=2) show(); });
  var lastY=window.scrollY, armed=false;
  window.addEventListener('scroll',function(){ var y=window.scrollY; if(y>640)armed=true; if(armed&&y<lastY-42&&y<420)show(); lastY=y; },{passive:true});
